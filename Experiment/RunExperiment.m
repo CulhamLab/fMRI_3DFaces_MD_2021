@@ -81,6 +81,15 @@ KbCheck;
 %create data folder if needed
 if ~exist(p.PATH.DATA_FOLDER), mkdir(p.PATH.DATA_FOLDER);, end
 
+%store git repo info
+if exist('IsGitRepo','file') && ~IsGitRepo
+    warning('This project does not appear to be part of a git repository. No git data will be saved.');
+elseif exist('GetGitInfo','file')
+    d.GitInfo = GetGitInfo;
+else
+    warning('The "CulhamLab/Git-Version" repo has not been configured. Information about this project''s current repository status (version, etc.) will NOT be saved to the data file.');
+end
+
 %load order
 [~,~,d.order] = xlsread(p.PATH.ORDER);
 d.order_headers = d.order(1,:);
