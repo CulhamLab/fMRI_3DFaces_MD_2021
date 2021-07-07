@@ -48,7 +48,7 @@ p.KEY.TRIGGER = [53 84]; %5 and/or T
 p.KEY.BUTTON_BOX = [49 50 51 52 82 71 66 89 97 98 99 100]; %1-4 top of key board, rgby, 1-4 numpad
 
 %screen
-p.SCREEN.NUMBER = 2;
+p.SCREEN.NUMBER = 0;
 p.SCREEN.RECT = []; %[0 0 1920 1080];
 p.SCREEN.EXPECTED_SIZE = [1080 1920]; %[height width]
 
