@@ -25,7 +25,7 @@ end
 %% Parameters
 
 %debug draws volume number
-p.DEBUG = true;
+p.DEBUG = false;
 
 %TR in seconds
 p.TR = 1;
