@@ -15,7 +15,7 @@ end
 type = upper(type);
 switch type
     case 'PILOT'
-        p.DURATION.IMAGE_PRESENTATION_SECONDS = 1;
+        p.DURATION.IMAGE_PRESENTATION_SECONDS = 10;
         p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
         p.SCREEN.TEXT_COLOUR = [255 255 255];
     otherwise
@@ -521,7 +521,7 @@ for f = 1:length(d.image_filename_lookup)
         image = repmat(image,[1 1 3]);
     end
     
-    %degamming the images so they don't look as pale
+    %degamma'ing the images so they don't look as pale
         image = imadjust(image, [], [], 1/log(2.2));
         
     %copies for left and right view
