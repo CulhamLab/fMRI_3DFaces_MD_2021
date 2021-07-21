@@ -522,8 +522,8 @@ for f = 1:length(d.image_filename_lookup)
     end
     
     %degamming the images so they don't look as pale
-    
-    image = imadjust(image, [], [], 1/log(2.2));
+        image = imadjust(image, [], [], 1/log(2.2));
+        
     %copies for left and right view
     images(f).left = image;
     images(f).right = image;
