@@ -504,6 +504,9 @@ for f = 1:length(d.image_filename_lookup)
     images(f).filename = d.image_filename_lookup{f};
     image = imread([p.PATH.IMAGE images(f).filename]);
     
+    %TEMP REMOVE ME LATER KS
+    image = imresize(image, [p.IMAGES.EXPECTED_HEIGHT p.IMAGES.EXPECTED_WIDTH]);
+    
     %check size
     [height,width,~] = size(image);
     if p.IMAGES.EXPECTED_WIDTH ~= width || p.IMAGES.EXPECTED_HEIGHT ~= height
@@ -544,6 +547,8 @@ if index_right == 0
 else
     right = textures.images(index_right).right;
 end
+%set GPU CLUTs to linear
+Screen('LoadNormalizedGammaTable', window, linspace(0,1,256)'*[1,1,1]);
 
 Screen('SelectStereoDrawBuffer', window, param.SCREEN.BUFFER_ID.LEFT);
 Screen('DrawTexture', window, left);
