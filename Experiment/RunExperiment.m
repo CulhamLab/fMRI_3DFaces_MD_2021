@@ -504,8 +504,33 @@ for f = 1:length(d.image_filename_lookup)
     images(f).filename = d.image_filename_lookup{f};
     image = imread([p.PATH.IMAGE images(f).filename]);
     
-    %TEMP REMOVE ME LATER KS
-    image = imresize(image, [p.IMAGES.EXPECTED_HEIGHT p.IMAGES.EXPECTED_WIDTH]);
+    %trim image where larger than expected
+    width = size(image,2);
+    trim_width = width - p.IMAGES.EXPECTED_WIDTH;
+    if trim_width > 0
+        select = (1 + ceil(trim_width/2)) : (width - floor(trim_width/2));
+        image = image(:,select,:);
+    end
+    height = size(image,1);
+    trim_height = height - p.IMAGES.EXPECTED_HEIGHT;
+    if trim_height > 0
+        select = (1 + ceil(trim_height/2)) : (height - floor(trim_height/2));
+        image = image(select,:,:);
+    end
+    
+    %fill edges where larger than expected
+    width = size(image,2);
+    width_fill = p.IMAGES.EXPECTED_WIDTH - width;
+    if width_fill > 0
+        height = size(image,1);
+        image = [repmat(reshape(p.SCREEN.BACKGROUND_COLOUR,[1 1 3]),[height ceil(width_fill/2)]) image repmat(reshape(p.SCREEN.BACKGROUND_COLOUR,[1 1 3]),[height floor(width_fill/2)])];
+    end
+    height = size(image,1);
+    height_fill = p.IMAGES.EXPECTED_HEIGHT - height;
+    if height_fill > 0
+        width = size(image,2);
+        image = [repmat(reshape(p.SCREEN.BACKGROUND_COLOUR,[1 1 3]),[ceil(height_fill/2) width]); image; repmat(reshape(p.SCREEN.BACKGROUND_COLOUR,[1 1 3]),[floor(height_fill/2) width])];
+    end
     
     %check size
     [height,width,~] = size(image);
