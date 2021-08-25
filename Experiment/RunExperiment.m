@@ -94,6 +94,10 @@ end
 [~,~,d.order] = xlsread(p.PATH.ORDER);
 d.order_headers = d.order(1,:);
 
+%remove empty rows at end
+row_last = find(cellfun(@(x) length(x)==1 && isnan(x), d.order(:,2)) == 0, 1, 'last');
+d.order = d.order(1:row_last,:);
+
 %fixation
 if p.FIXATION.SHOW
     [s.fixation.imgFix,~,transparency] = imread(p.FIXATION.FILEPATH);
