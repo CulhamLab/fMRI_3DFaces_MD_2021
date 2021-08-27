@@ -15,7 +15,7 @@ end
 type = upper(type);
 switch type
     case 'PILOT'
-        p.DURATION.IMAGE_PRESENTATION_SECONDS = 10;
+        p.DURATION.IMAGE_PRESENTATION_SECONDS = 0.8;
         p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
         p.SCREEN.TEXT_COLOUR = [255 255 255];
     otherwise
