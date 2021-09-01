@@ -466,6 +466,7 @@ catch err
     sca
     sca
     ShowCursor;
+    clear images
     save
     
     %PROPixx complete
