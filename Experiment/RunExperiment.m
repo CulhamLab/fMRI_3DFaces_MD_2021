@@ -18,6 +18,10 @@ switch type
         p.DURATION.IMAGE_PRESENTATION_SECONDS = 0.8;
         p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
         p.SCREEN.TEXT_COLOUR = [255 255 255];
+    case 'LOC'
+        p.DURATION.IMAGE_PRESENTATION_SECONDS = 0.8;
+        p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
+        p.SCREEN.TEXT_COLOUR = [255 255 255];
     otherwise
         error('Unknown type!');
 end
