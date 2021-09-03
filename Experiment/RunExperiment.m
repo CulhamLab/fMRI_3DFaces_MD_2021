@@ -76,6 +76,9 @@ p.FIXATION.RIGHT_VIEW.ADJUST_X = -15;
 p.FIXATION.RIGHT_VIEW.ADJUST_Y = -135;
 p.FIXATION.TRANSPARENCY_CUTOFF = 240;
 
+%misc
+p.MISC.CONDITIONS_WITH_UNLIMITED_DISPLAY_DURATION = {'CUE'};
+
 %% Prepare
 
 %make future calls faster
@@ -168,7 +171,11 @@ for row = 2:size(d.order,1)
         if isempty(image_number_right)
             image_number_right = 0;
         end
-        dur = p.DURATION.IMAGE_PRESENTATION_SECONDS;
+        if any(strcmpi(p.MISC.CONDITIONS_WITH_UNLIMITED_DISPLAY_DURATION, d.order{row,2}))
+            dur = inf;
+        else
+            dur = p.DURATION.IMAGE_PRESENTATION_SECONDS;
+        end
         for v = 1:p.TR:d.order{row,3}
             image_number_left_this = image_number_left;
             image_number_right_this = image_number_right;
