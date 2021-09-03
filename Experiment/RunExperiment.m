@@ -151,7 +151,7 @@ for row = 2:size(d.order,1)
         error('Events cannot be fraction of TR.')
     end
     
-    if ~d.order{row,1}
+    if isempty(d.order{row,4}) && isempty(d.order{row,5})
         %NULL
         for v = 1:p.TR:d.order{row,3}
             d.sched(end+1,:) = [0 0 0 0 row 0];
