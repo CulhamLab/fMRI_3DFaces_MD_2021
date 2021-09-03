@@ -38,7 +38,7 @@ p.TR = 1;
 p.PATH.ORDERS_FOLDER = [pwd filesep 'Orders_' type filesep];
 p.PATH.DATA_FOLDER = [pwd filesep 'Data_' type filesep];
 p.PATH.IMAGE = [pwd filesep 'Images_' type filesep];
-p.PATH.ORDER = [p.PATH.ORDERS_FOLDER sprintf('PAR%02d_RUN%02d.xlsx',par,run)];
+p.PATH.ORDER = [p.PATH.ORDERS_FOLDER sprintf('PAR%02d_RUN%02d.xls*',par,run)];
 p.PATH.DATA = [p.PATH.DATA_FOLDER sprintf('PAR%02d_RUN%02d_%s_%s',par,run,type,get_timestamp)];
 
 %trigger checking
@@ -98,6 +98,14 @@ else
 end
 
 %load order
+list = dir(p.PATH.ORDER);
+if isempty(list)
+    error('Could not locate order file: %s', p.PATH.ORDER)
+elseif length(list)>1
+    error('Multiple matches for order file: %s', p.PATH.ORDER);
+else
+    p.PATH.ORDER = [list.folder filesep list.name];
+end
 [~,~,d.order] = xlsread(p.PATH.ORDER);
 d.order_headers = d.order(1,:);
 
