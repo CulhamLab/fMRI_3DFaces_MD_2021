@@ -1,4 +1,4 @@
-FRAME_SIZE = [1080 1920];
+FRAME_SIZE = [962 1280];
 FOLDER_RAW = [pwd filesep 'Raw' filesep];
 
 list = dir(FOLDER_RAW);
