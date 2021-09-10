@@ -1,13 +1,12 @@
 %RunExperiment(type,sub,run)
-%Set GPU CLUTs to linear
 
-Screen('LoadNormalizedGammaTable', win, linspace(0, 1, 256)' * [1, 1, 1]); 
 function RunExperiment(type,par,run)
 
 
 %% Uncomment this if the screen won't start even after "clear all" and "close all" (image presentation timing will not be good)
 %Screen('Preference', 'SkipSyncTests', 1);
-
+%set GPU CLUTs to linear
+Screen('LoadNormalizedGammaTable', window, linspace(0,1,256)'*[1,1,1]);
 %% Check PsychToolbox
 AssertOpenGL();
 
