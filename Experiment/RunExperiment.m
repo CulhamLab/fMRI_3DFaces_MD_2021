@@ -1,4 +1,7 @@
 %RunExperiment(type,sub,run)
+%Set GPU CLUTs to linear
+
+Screen('LoadNormalizedGammaTable', win, linspace(0, 1, 256)' * [1, 1, 1]); 
 function RunExperiment(type,par,run)
 
 
