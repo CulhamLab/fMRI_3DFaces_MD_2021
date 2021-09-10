@@ -4,7 +4,7 @@ function RunExperiment(type,par,run)
 
 
 %% Uncomment this if the screen won't start even after "clear all" and "close all" (image presentation timing will not be good)
-%Screen('Preference', 'SkipSyncTests', 1);
+Screen('Preference', 'SkipSyncTests', 0);
 
 %% Check PsychToolbox
 AssertOpenGL();
@@ -38,7 +38,7 @@ end
 %% Parameters
 
 %debug draws volume number
-p.DEBUG = false;
+p.DEBUG = true;
 
 %TR in seconds
 p.TR = 1;
@@ -240,7 +240,7 @@ HideCursor;
 %% Clut
 
 %set GPU CLUTs to linear
-Screen('LoadNormalizedGammaTable', s.win, linspace(0,1,256)'*[1,1,1]);
+%Screen('LoadNormalizedGammaTable', s.win, linspace(0,1,256)'*[1,1,1]);
 
 %% Make Image Textures
 
