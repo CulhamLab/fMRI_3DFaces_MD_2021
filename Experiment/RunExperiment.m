@@ -3,7 +3,7 @@ function RunExperiment(type,par,run)
 
 
 %% Uncomment this if the screen won't start even after "clear all" and "close all" (image presentation timing will not be good)
-Screen('Preference', 'SkipSyncTests', 1);
+%Screen('Preference', 'SkipSyncTests', 1);
 
 %% Check PsychToolbox
 AssertOpenGL();
@@ -37,7 +37,7 @@ end
 %% Parameters
 
 %debug draws volume number
-p.DEBUG = true;
+p.DEBUG = false;
 
 %TR in seconds
 p.TR = 1;
@@ -60,8 +60,8 @@ p.KEY.TRIGGER = [53 84]; %5 and/or T
 p.KEY.BUTTON_BOX = [49 50 51 52 82 71 66 89 97 98 99 100]; %1-4 top of key board, rgby, 1-4 numpad
 
 %screen
-p.SCREEN.NUMBER = 1;
-p.SCREEN.RECT = [0 0 1920 1080]; %[0 0 1920 1080];
+p.SCREEN.NUMBER = 0;
+p.SCREEN.RECT = []; %[0 0 1920 1080];
 p.SCREEN.EXPECTED_SIZE = [1080 1920]; %[height width]
 
 %stereo
