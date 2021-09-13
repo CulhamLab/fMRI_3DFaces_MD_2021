@@ -4,7 +4,7 @@ function RunExperiment(type,par,run)
 
 
 %% Uncomment this if the screen won't start even after "clear all" and "close all" (image presentation timing will not be good)
-%Screen('Preference', 'SkipSyncTests', 1);
+Screen('Preference', 'SkipSyncTests', 1);
 
 %% Check PsychToolbox
 AssertOpenGL();
@@ -38,7 +38,7 @@ end
 %% Parameters
 
 %debug draws volume number
-p.DEBUG = false;
+p.DEBUG = true;
 
 %TR in seconds
 p.TR = 1;
@@ -62,7 +62,7 @@ p.KEY.BUTTON_BOX = [49 50 51 52 82 71 66 89 97 98 99 100]; %1-4 top of key board
 
 %screen
 p.SCREEN.NUMBER = 0;
-p.SCREEN.RECT = []; %[0 0 1920 1080];
+p.SCREEN.RECT = [0 0 1920 1080]; %[0 0 1920 1080];
 p.SCREEN.EXPECTED_SIZE = [1080 1920]; %[height width]
 
 %stereo
@@ -94,13 +94,13 @@ KbCheck;
 if ~exist(p.PATH.DATA_FOLDER), mkdir(p.PATH.DATA_FOLDER);, end
 
 %store git repo info
-  if exist('IsGitRepo','file') && ~IsGitRepo
-     warning('This project does not appear to be part of a git repository. No git data will be saved.');
- elseif exist('GetGitInfo','file')
-     d.GitInfo = GetGitInfo;
- else
-     warning('The "CulhamLab/Git-Version" repo has not been configured. Information about this project''s current repository status (version, etc.) will NOT be saved to the data file.');
- end
+%  if exist('IsGitRepo','file') && ~IsGitRepo
+%      warning('This project does not appear to be part of a git repository. No git data will be saved.');
+%  elseif exist('GetGitInfo','file')
+%      d.GitInfo = GetGitInfo;
+%  else
+%      warning('The "CulhamLab/Git-Version" repo has not been configured. Information about this project''s current repository status (version, etc.) will NOT be saved to the data file.');
+%  end
 
 %load order
 list = dir(p.PATH.ORDER);
@@ -240,7 +240,7 @@ HideCursor;
 %% Clut
 
 %set GPU CLUTs to linear
-Screen('LoadNormalizedGammaTable', s.win, linspace(0,1,256)'*[1,1,1]);
+%Screen('LoadNormalizedGammaTable', s.win, linspace(0,1,256)'*[1,1,1]);
 
 %% Make Image Textures
 
@@ -610,7 +610,7 @@ else
     right = textures.images(index_right).right;
 end
 %set GPU CLUTs to linear
-Screen('LoadNormalizedGammaTable', window, linspace(0,1,256)'*[1,1,1]);
+%Screen('LoadNormalizedGammaTable', window, linspace(0,1,256)'*[1,1,1]);
 
 Screen('SelectStereoDrawBuffer', window, param.SCREEN.BUFFER_ID.LEFT);
 Screen('DrawTexture', window, left);
