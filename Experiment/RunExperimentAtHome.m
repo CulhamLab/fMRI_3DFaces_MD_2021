@@ -62,7 +62,7 @@ p.KEY.BUTTON_BOX = [49 50 51 52 82 71 66 89 97 98 99 100]; %1-4 top of key board
 
 %screen
 p.SCREEN.NUMBER = 0;
-p.SCREEN.RECT = [0 0 1920 1080]; %[0 0 1920 1080];
+p.SCREEN.RECT = [500 0 2420 1080]; %[0 0 1920 1080];
 p.SCREEN.EXPECTED_SIZE = [1080 1920]; %[height width]
 
 %stereo
