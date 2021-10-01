@@ -1,4 +1,4 @@
-RESIZE_FACTOR = 0.25;
+RESIZE_FACTOR = 0.225;
 FOLDER_RAW = [pwd filesep 'Raw' filesep];
 
 list = dir(FOLDER_RAW);

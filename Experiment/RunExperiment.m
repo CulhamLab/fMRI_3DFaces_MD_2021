@@ -1,9 +1,10 @@
 %RunExperiment(type,sub,run)
+
 function RunExperiment(type,par,run)
 
 
 %% Uncomment this if the screen won't start even after "clear all" and "close all" (image presentation timing will not be good)
-% Screen('Preference', 'SkipSyncTests', 1);
+%Screen('Preference', 'SkipSyncTests', 1);
 
 %% Check PsychToolbox
 AssertOpenGL();
@@ -18,10 +19,18 @@ switch type
         p.DURATION.IMAGE_PRESENTATION_SECONDS = 0.8;
         p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
         p.SCREEN.TEXT_COLOUR = [255 255 255];
+        p.FIXATION.LEFT_VIEW.ADJUST_X = -10;
+        p.FIXATION.LEFT_VIEW.ADJUST_Y = -125;
+        p.FIXATION.RIGHT_VIEW.ADJUST_X = -10;
+        p.FIXATION.RIGHT_VIEW.ADJUST_Y = -125;
     case 'LOC'
         p.DURATION.IMAGE_PRESENTATION_SECONDS = 0.8;
         p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
         p.SCREEN.TEXT_COLOUR = [255 255 255];
+        p.FIXATION.LEFT_VIEW.ADJUST_X = 0;
+        p.FIXATION.LEFT_VIEW.ADJUST_Y = 0;
+        p.FIXATION.RIGHT_VIEW.ADJUST_X = 0;
+        p.FIXATION.RIGHT_VIEW.ADJUST_Y = 0;
     otherwise
         error('Unknown type!');
 end
@@ -38,7 +47,7 @@ p.TR = 1;
 p.PATH.ORDERS_FOLDER = [pwd filesep 'Orders_' type filesep];
 p.PATH.DATA_FOLDER = [pwd filesep 'Data_' type filesep];
 p.PATH.IMAGE = [pwd filesep 'Images_' type filesep];
-p.PATH.ORDER = [p.PATH.ORDERS_FOLDER sprintf('PAR%02d_RUN%02d.xlsx',par,run)];
+p.PATH.ORDER = [p.PATH.ORDERS_FOLDER sprintf('PAR%02d_RUN%02d.xls*',par,run)];
 p.PATH.DATA = [p.PATH.DATA_FOLDER sprintf('PAR%02d_RUN%02d_%s_%s',par,run,type,get_timestamp)];
 
 %trigger checking
@@ -70,11 +79,10 @@ p.IMAGES.EXPECTED_HEIGHT = 1080;
 p.FIXATION.SHOW = true;
 p.FIXATION.FILEPATH = 'fixation_transparent.png';
 p.FIXATION.SIZE = [30 30];
-p.FIXATION.LEFT_VIEW.ADJUST_X = -15;
-p.FIXATION.LEFT_VIEW.ADJUST_Y = -135;
-p.FIXATION.RIGHT_VIEW.ADJUST_X = -15;
-p.FIXATION.RIGHT_VIEW.ADJUST_Y = -135;
 p.FIXATION.TRANSPARENCY_CUTOFF = 240;
+
+%misc
+p.MISC.CONDITIONS_WITH_UNLIMITED_DISPLAY_DURATION = {'CUE'};
 
 %% Prepare
 
@@ -86,15 +94,23 @@ KbCheck;
 if ~exist(p.PATH.DATA_FOLDER), mkdir(p.PATH.DATA_FOLDER);, end
 
 %store git repo info
-if exist('IsGitRepo','file') && ~IsGitRepo
-    warning('This project does not appear to be part of a git repository. No git data will be saved.');
-elseif exist('GetGitInfo','file')
-    d.GitInfo = GetGitInfo;
-else
-    warning('The "CulhamLab/Git-Version" repo has not been configured. Information about this project''s current repository status (version, etc.) will NOT be saved to the data file.');
-end
+  if exist('IsGitRepo','file') && ~IsGitRepo
+     warning('This project does not appear to be part of a git repository. No git data will be saved.');
+ elseif exist('GetGitInfo','file')
+     d.GitInfo = GetGitInfo;
+ else
+     warning('The "CulhamLab/Git-Version" repo has not been configured. Information about this project''s current repository status (version, etc.) will NOT be saved to the data file.');
+ end
 
 %load order
+list = dir(p.PATH.ORDER);
+if isempty(list)
+    error('Could not locate order file: %s', p.PATH.ORDER)
+elseif length(list)>1
+    error('Multiple matches for order file: %s', p.PATH.ORDER);
+else
+    p.PATH.ORDER = [list.folder filesep list.name];
+end
 [~,~,d.order] = xlsread(p.PATH.ORDER);
 d.order_headers = d.order(1,:);
 
@@ -151,7 +167,7 @@ for row = 2:size(d.order,1)
         error('Events cannot be fraction of TR.')
     end
     
-    if ~d.order{row,1}
+    if isempty(d.order{row,4}) && isempty(d.order{row,5})
         %NULL
         for v = 1:p.TR:d.order{row,3}
             d.sched(end+1,:) = [0 0 0 0 row 0];
@@ -168,7 +184,11 @@ for row = 2:size(d.order,1)
         if isempty(image_number_right)
             image_number_right = 0;
         end
-        dur = p.DURATION.IMAGE_PRESENTATION_SECONDS;
+        if any(strcmpi(p.MISC.CONDITIONS_WITH_UNLIMITED_DISPLAY_DURATION, d.order{row,2}))
+            dur = inf;
+        else
+            dur = p.DURATION.IMAGE_PRESENTATION_SECONDS;
+        end
         for v = 1:p.TR:d.order{row,3}
             image_number_left_this = image_number_left;
             image_number_right_this = image_number_right;
@@ -216,6 +236,11 @@ if s.rect(1)~=0 || s.rect(2)~=0 || s.rect(3)~=p.SCREEN.EXPECTED_SIZE(2) || s.rec
     error('Unexpected screen size! [%s]',num2str(s.rect))
 end
 HideCursor;
+
+%% Clut
+
+%set GPU CLUTs to linear
+Screen('LoadNormalizedGammaTable', s.win, linspace(0,1,256)'*[1,1,1]);
 
 %% Make Image Textures
 
