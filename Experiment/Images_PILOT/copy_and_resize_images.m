@@ -11,7 +11,9 @@ for fid = 1:number_files
     
     img = imread([list(fid).folder filesep list(fid).name]);
     img = imresize(img, RESIZE_FACTOR);
-    imwrite(img, list(fid).name);
+    
+    filename = strrep(list(fid).name, '.jpg', '.png');
+    imwrite(img, filename);
 end
 
 disp Done!
