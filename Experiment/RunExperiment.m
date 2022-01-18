@@ -72,6 +72,7 @@ p.SCREEN.BUFFER_ID.LEFT = 0; %flip these if L/R is reversed
 p.SCREEN.BUFFER_ID.RIGHT = 1;
 
 %image
+p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
 p.IMAGES.EXPECTED_WIDTH = 1920;
 p.IMAGES.EXPECTED_HEIGHT = 1080;
 
@@ -550,6 +551,20 @@ for f = 1:length(d.image_filename_lookup)
     if trim_height > 0
         select = (1 + ceil(trim_height/2)) : (height - floor(trim_height/2));
         image = image(select,:,:);
+    end
+    
+    %vertical shift
+    if p.IMAGES.VERTICAL_SHIFT > 0
+        sz = size(image);
+        image = [zeros(p.IMAGES.VERTICAL_SHIFT,sz(2),3,'uint8'); image];
+        max_y = min(sz(1) + p.IMAGES.VERTICAL_SHIFT, p.IMAGES.EXPECTED_HEIGHT);
+        image = image(1:max_y, :, :);
+    elseif p.IMAGES.VERTICAL_SHIFT < 0
+        pix = abs(p.IMAGES.VERTICAL_SHIFT);
+        sz = size(image);
+        image = [image; zeros(pix,sz(2),3,'uint8')];
+        max_y = min(sz(1) + pix, p.IMAGES.EXPECTED_HEIGHT);
+        image = image(end-max_y+1:end, :, :);
     end
     
     %fill edges where larger than expected
