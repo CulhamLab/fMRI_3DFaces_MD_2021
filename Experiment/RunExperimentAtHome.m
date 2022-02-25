@@ -23,6 +23,7 @@ switch type
         p.FIXATION.LEFT_VIEW.ADJUST_Y = -140;
         p.FIXATION.RIGHT_VIEW.ADJUST_X = -15;
         p.FIXATION.RIGHT_VIEW.ADJUST_Y = -140;
+        p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
     case 'LOC'
         p.DURATION.IMAGE_PRESENTATION_SECONDS = 0.8;
         p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
@@ -31,6 +32,7 @@ switch type
         p.FIXATION.LEFT_VIEW.ADJUST_Y = 0;
         p.FIXATION.RIGHT_VIEW.ADJUST_X = 0;
         p.FIXATION.RIGHT_VIEW.ADJUST_Y = 0;
+        p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
     otherwise
         error('Unknown type!');
 end
@@ -550,6 +552,20 @@ for f = 1:length(d.image_filename_lookup)
     if trim_height > 0
         select = (1 + ceil(trim_height/2)) : (height - floor(trim_height/2));
         image = image(select,:,:);
+    end
+    
+    %vertical shift
+    if p.IMAGES.VERTICAL_SHIFT > 0
+        sz = size(image);
+        image = [zeros(p.IMAGES.VERTICAL_SHIFT,sz(2),3,'uint8'); image];
+        max_y = min(sz(1) + p.IMAGES.VERTICAL_SHIFT, p.IMAGES.EXPECTED_HEIGHT);
+        image = image(1:max_y, :, :);
+    elseif p.IMAGES.VERTICAL_SHIFT < 0
+        pix = abs(p.IMAGES.VERTICAL_SHIFT);
+        sz = size(image);
+        image = [image; zeros(pix,sz(2),3,'uint8')];
+        max_y = min(sz(1) + pix, p.IMAGES.EXPECTED_HEIGHT);
+        image = image(end-max_y+1:end, :, :);
     end
     
     %fill edges where larger than expected
