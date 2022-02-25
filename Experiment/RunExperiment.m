@@ -23,6 +23,7 @@ switch type
         p.FIXATION.LEFT_VIEW.ADJUST_Y = -125;
         p.FIXATION.RIGHT_VIEW.ADJUST_X = -10;
         p.FIXATION.RIGHT_VIEW.ADJUST_Y = -125;
+        p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
     case 'LOC'
         p.DURATION.IMAGE_PRESENTATION_SECONDS = 0.8;
         p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
@@ -31,6 +32,7 @@ switch type
         p.FIXATION.LEFT_VIEW.ADJUST_Y = 0;
         p.FIXATION.RIGHT_VIEW.ADJUST_X = 0;
         p.FIXATION.RIGHT_VIEW.ADJUST_Y = 0;
+        p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
     otherwise
         error('Unknown type!');
 end
@@ -72,7 +74,7 @@ p.SCREEN.BUFFER_ID.LEFT = 0; %flip these if L/R is reversed
 p.SCREEN.BUFFER_ID.RIGHT = 1;
 
 %image
-p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
+% p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
 p.IMAGES.EXPECTED_WIDTH = 1920;
 p.IMAGES.EXPECTED_HEIGHT = 1080;
 
