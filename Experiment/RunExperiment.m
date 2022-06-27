@@ -23,6 +23,8 @@ switch type
         p.FIXATION.LEFT_VIEW.ADJUST_Y = -125;
         p.FIXATION.RIGHT_VIEW.ADJUST_X = -10;
         p.FIXATION.RIGHT_VIEW.ADJUST_Y = -125;
+        p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
+        p.IMAGES.RESIZE_FACTOR = 1; %loaded images are scaled by this value, also adjusts EXPECTED_WIDTH/EXPECTED_HEIGHT, 1.1=10% larger
     case 'LOC'
         p.DURATION.IMAGE_PRESENTATION_SECONDS = 0.8;
         p.SCREEN.BACKGROUND_COLOUR = [0 0 0];
@@ -31,6 +33,8 @@ switch type
         p.FIXATION.LEFT_VIEW.ADJUST_Y = 0;
         p.FIXATION.RIGHT_VIEW.ADJUST_X = 0;
         p.FIXATION.RIGHT_VIEW.ADJUST_Y = 0;
+        p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
+        p.IMAGES.RESIZE_FACTOR = 1; %loaded images are scaled by this value, also adjusts EXPECTED_WIDTH/EXPECTED_HEIGHT, 1.1=10% larger
     otherwise
         error('Unknown type!');
 end
@@ -72,9 +76,10 @@ p.SCREEN.BUFFER_ID.LEFT = 0; %flip these if L/R is reversed
 p.SCREEN.BUFFER_ID.RIGHT = 1;
 
 %image
-p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
+% p.IMAGES.VERTICAL_SHIFT = 0; %number of PIXELS, positive is down, negative is up
 p.IMAGES.EXPECTED_WIDTH = 1920;
 p.IMAGES.EXPECTED_HEIGHT = 1080;
+p.IMAGES.FLIP_HORIZONTAL = true;
 
 %fixation
 p.FIXATION.SHOW = true;
@@ -86,6 +91,10 @@ p.FIXATION.TRANSPARENCY_CUTOFF = 240;
 p.MISC.CONDITIONS_WITH_UNLIMITED_DISPLAY_DURATION = {'CUE'};
 
 %% Prepare
+
+%adjust expected dimensions
+p.IMAGES.EXPECTED_WIDTH = round(p.IMAGES.EXPECTED_WIDTH * p.IMAGES.RESIZE_FACTOR);
+p.IMAGES.EXPECTED_HEIGHT = round(p.IMAGES.EXPECTED_HEIGHT * p.IMAGES.RESIZE_FACTOR);
 
 %make future calls faster
 GetSecs;
@@ -538,6 +547,16 @@ end
 for f = 1:length(d.image_filename_lookup)
     images(f).filename = d.image_filename_lookup{f};
     image = imread([p.PATH.IMAGE images(f).filename]);
+    
+    %flip?
+    if p.IMAGES.FLIP_HORIZONTAL
+        image = image(:, end:-1:1, :);
+    end
+    
+    %resize
+    if p.IMAGES.RESIZE_FACTOR ~= 1
+        image = imresize(image, p.IMAGES.RESIZE_FACTOR);
+    end
     
     %trim image where larger than expected
     width = size(image,2);
