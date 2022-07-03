@@ -1,6 +1,6 @@
 %RunExperiment(type,sub,run)
 
-function RunExperiment(type,par,run)
+function RunExperimentAtHome(type,par,run)
 
 
 %% Uncomment this if the screen won't start even after "clear all" and "close all" (image presentation timing will not be good)
@@ -66,7 +66,7 @@ p.KEY.BUTTON_BOX = [49 50 51 52 82 71 66 89 97 98 99 100]; %1-4 top of key board
 
 %screen
 p.SCREEN.NUMBER = 0;
-p.SCREEN.RECT = [1500 0 3420 1080]; %[0 0 1920 1080];
+p.SCREEN.RECT = [0 0 1920 1080]; %[0 0 1920 1080];
 p.SCREEN.EXPECTED_SIZE = [1080 1920]; %[height width]
 
 %stereo
@@ -78,6 +78,7 @@ p.SCREEN.BUFFER_ID.RIGHT = 0;
 %image
 p.IMAGES.EXPECTED_WIDTH = 1920;
 p.IMAGES.EXPECTED_HEIGHT = 1080;
+p.IMAGES.FLIP_HORIZONTAL = true;
 
 %fixation
 p.FIXATION.SHOW = true;
@@ -546,6 +547,11 @@ for f = 1:length(d.image_filename_lookup)
     images(f).filename = d.image_filename_lookup{f};
     image = imread([p.PATH.IMAGE images(f).filename]);
     
+        %flip?
+    if p.IMAGES.FLIP_HORIZONTAL
+        image = image(:, end:-1:1, :);
+    end
+        
     %resize
     if p.IMAGES.RESIZE_FACTOR ~= 1
         image = imresize(image, p.IMAGES.RESIZE_FACTOR);
