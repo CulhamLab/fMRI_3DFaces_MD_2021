@@ -295,16 +295,17 @@ while 1
 end
 
 %% Run Volumes
-for v = 1:d.number_volumes
+vol_first = 1;
+for v = vol_first:d.number_volumes
     %volume start time actual
-    if v==1
+    if v==vol_first
         d.volume_data(v).time_startActual = 0;
     else
         d.volume_data(v).time_startActual = GetSecs-t0;
     end
     
     %volume start time
-    if v==1 | d.volume_data(v-1).recievedTrigger %is first vol OR prior vol recieved trigger
+    if v==vol_first | d.volume_data(v-1).recievedTrigger %is first vol OR prior vol recieved trigger
         d.volume_data(v).time_start = d.volume_data(v).time_startActual; %use actual time
     else %missed a trigger
         d.volume_data(v).time_start = d.volume_data(v-1).time_start + p.TR; %use expected trigger time
